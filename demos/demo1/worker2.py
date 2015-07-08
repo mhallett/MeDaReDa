@@ -3,13 +3,13 @@
 
 import datetime
 import pyrax
-import medareda_worker_lib
+import medareda_lib
 import os
 
 class Worker2(object):
     
     def __init__(self,in_table):
-        self.conn = medareda_worker_lib.get_conn()
+        self.conn = medareda_lib.get_conn()
         self.in_table = in_table
         
         self.server_id = self._getServerId()
@@ -45,7 +45,7 @@ class Worker2(object):
         # ( if status == deleting, return )
         # get amount of work to to
         # while work todo
-        #   set worker status to work
+        #   set status to work
         #   get work
         #   process work
         # set status to idle
