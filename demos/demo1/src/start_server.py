@@ -1,6 +1,7 @@
 # start_processing
 
 import os
+import sys
 import process
 import datetime
 
@@ -19,22 +20,44 @@ def server_just_built(conf_filename):
 
     # if the log file does not exist then the box has just become acitve
 
-    if not os.path.isfile(log_name):
-        return True
-    else:
+    if os.path.isfile(log_name):
         return False
+    else:
+        return True
 
 
-def main(conf_filename):
+def main():
+    return # ----------------------------------------------------------------
+
+    print '- process --------'
+
+    for i in range(20):
+        logger.info(i)
+        print i
+        try:
+            process.processSinglePrice()
+        except Exception, e:
+            logger.exception('ERROR')
+        time.sleep(5)
+
+
+if __name__ == '__main__':
+    filename = r'../ini/logging.conf'
+    if not os.path.exists(filename):
+        filename = r'./ini_default/logging.conf'
+        if not os.path.exists(filename):
+            print 'No logging file %s' %filename
+            sys.exit(2)
+
+    sjb = server_just_built(filename)
 
     hostname = os.uname()[1]
 
+    logging.config.fileConfig(filename)
     logger = logging.getLogger('startup')
     logger.info('startup on (%s)' %hostname)
-
-    sjb = server_just_built(conf_filename)
-    #print 'Sssssss', sjb
     logger.info('server just built (%s)' %sjb)
+
     if sjb:
         msg = 'wait for hostname to change from (%s)' %(hostname)
         logger.info(msg)
@@ -57,24 +80,5 @@ def main(conf_filename):
 
         logger.info('start')
 
-    return # ----------------------------------------------------------------
-
-    print '- process --------'
-
-    for i in range(20):
-        logger.info(i)
-        print i
-        try:
-            process.processSinglePrice()
-        except Exception, e:
-            logger.exception('ERROR')
-        time.sleep(5)
-
-
-if __name__ == '__main__':
-    filename = r'../ini/logging.conf'
-    if not os.path.exists(filename):
-        print 'No logging file %s' %filename
-    logging.config.fileConfig('../ini/logging.conf')
-    main(filename)
+    main()
     print 'Done'
