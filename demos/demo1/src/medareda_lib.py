@@ -6,10 +6,10 @@ import urlparse
 import psycopg2
 import ConfigParser
 
-def get_ini_data(section, names):  
-    parser = ConfigParser.SafeConfigParser()  
+def get_ini_data(section, names):
+    parser = ConfigParser.SafeConfigParser()
     #parser.read('/root/medareda/demos/demo1/ini/medareda.ini')
-    parser.read('../ini/medareda.ini')
+    parser.read('./ini/medareda.ini')
     rtn = []
     for name in names:
         rtn.append( parser.get(section, name)  )

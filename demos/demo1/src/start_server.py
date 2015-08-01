@@ -42,9 +42,9 @@ def main():
 
 
 if __name__ == '__main__':
-    filename = r'../ini/logging.conf'
+    filename = r'./ini/logging.conf'
     if not os.path.exists(filename):
-        filename = r'./ini_default/logging.conf'
+        filename = r'./src/ini_default/logging.conf'
         if not os.path.exists(filename):
             print 'No logging file %s' %filename
             sys.exit(2)
