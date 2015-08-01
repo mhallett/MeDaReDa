@@ -2,21 +2,15 @@
 # chkconfig: 345 99 01
 # description: medareda test
 # /etc/init.d/medareda_startup
- 
+
 case "$1" in
   start)
     echo "Starting medareda_startup"
     # run application you want to start
-    #cd /root
-    #python /root/startup/test.py # add start time to the start up box file
-    
-    #echo "Move status to standby" 
-    #cd /root/MeDaReDa/demos/demo1/worker
-    #python set_worker_standby.py > set_worker_standby.log
 
     echo "Start processing"
-    cd /root/medareda/demos/demo1/src
-    python start_server.py > /root/medareda/demos/demo1/log/start_server.log
+    cd /root/medareda/demos/demo1
+    python src/start_server.py > /root/medareda/demos/demo1/log/start_server.log
 
     echo "Start ipython"
     /root/anaconda/bin/ipython notebook --profile /root/ipython_notebook_config.py
@@ -31,6 +25,5 @@ case "$1" in
     exit 1
     ;;
 esac
- 
-exit 0
 
+exit 0
