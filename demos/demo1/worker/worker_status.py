@@ -1,10 +1,10 @@
 # worker_status.py
 
 import datetime
-import medareda_worker_lib
+import medareda_lib
 
 def get_conn():
-    return medareda_worker_lib.get_conn()
+    return medareda_lib.get_conn()
 
 def _execute_sql(sql):
     conn = get_conn()
