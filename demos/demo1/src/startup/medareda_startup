@@ -1,14 +1,10 @@
 #! /bin/bash
 # chkconfig: 345 99 01
-# description: medareda test
 # /etc/init.d/medareda_startup
 
 case "$1" in
   start)
     echo "Starting medareda_startup"
-    # run application you want to start
-
-    echo "Start processing"
     cd /root/medareda/demos/demo1
     python src/start_server.py > /root/medareda/demos/demo1/log/start_server.log
 
