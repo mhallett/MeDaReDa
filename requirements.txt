@@ -120,7 +120,7 @@ SQLAlchemy==0.9.9
 statsmodels==0.6.1
 stevedore==1.6.0
 sympy==0.7.6
-tables==3.1.1
+#tables==3.1.1
 terminado==0.5
 Theano==0.6.0
 toolz==0.7.1
