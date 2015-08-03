@@ -13,7 +13,7 @@ blaze==0.7.3
 blz==0.6.2
 bokeh==0.8.1
 boto==2.36.0
-cdecimal==2.3
+#cdecimal==2.3
 certifi==14.5.14
 cffi==0.9.2
 clyent==0.3.4
