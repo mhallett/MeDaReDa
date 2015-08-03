@@ -35,7 +35,7 @@ funcsigs==0.4
 futures==2.2.0
 gevent==1.0.1
 gevent-websocket==0.9.3
-google==1.5
+#google==1.5
 googlefinance==0.7
 greenlet==0.4.5
 grin==1.2.1
