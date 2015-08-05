@@ -40,5 +40,5 @@ class TestStarstServer(unittest.TestCase):
         start_server.main()
 
 
-
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

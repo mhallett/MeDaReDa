@@ -8,4 +8,4 @@ install:
     - pip install -r requirementsA.txt
     - pip install -r requirements.txt
 
-script: nosetests
+script: nosetests -s demos/demo1/src
