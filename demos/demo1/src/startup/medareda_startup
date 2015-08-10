@@ -5,7 +5,6 @@
 case "$1" in
   start)
     echo "Starting medareda_startup"
-
     cd /root/medareda/demos/demo1
     python src/start_server.py > /root/medareda/demos/demo1/log/start_server.log
 
