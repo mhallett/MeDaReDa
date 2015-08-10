@@ -14,7 +14,7 @@ logging.config.fileConfig( logger_conf_file)
 #@mock.patch(start_server.server_just_built)
 #@mock.patch(start_server.main)
 
-class TestStarstServer(unittest.TestCase):
+class TestStartServer(unittest.TestCase):
 #log = logging.getLogger('root')
     @mock.patch('start_server.main')
     def test1(self, ssm):
