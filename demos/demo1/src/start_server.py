@@ -1,4 +1,8 @@
-# start_processing
+# start_server.py
+
+# this script will be run automatically when the server is built
+# it stop when the server is put in to 'cooldown'
+# it can be manually restarted 
 
 import os
 import sys
@@ -27,18 +31,26 @@ def server_just_built(conf_filename):
 
 
 def main():
-    return # ----------------------------------------------------------------
+    print 'MAIN'
+    hostname = os.uname()[1]
+    orig_status = worker.worker_status.getStatus(hostname)
 
-    print '- process --------'
+    while True:
+        status = worker.worker_status.getStatus(hostname)
+        # only log change in status
+        if status != orig_status:
+            orig_status = status
+            logger.info(status)
 
-    for i in range(20):
-        logger.info(i)
-        print i
-        try:
-            process.processSinglePrice()
-        except Exception, e:
-            logger.exception('ERROR')
-        time.sleep(5)
+        time.sleep(2)
+
+        if status == 'work':
+            try:
+                process.processSinglePrice()
+            except Exception, e:
+                logger.exception('ERROR')
+        elif status == 'cooldown':
+            break
 
 
 if __name__ == '__main__':

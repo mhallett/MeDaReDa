@@ -17,7 +17,6 @@ def get_ini_data(section, names):
 
 def get_conn():
     (host, dbname, user, password) = get_ini_data ('worker',('host','dbname','user','password'))
-    print '2 host',host
     conn_string = "host='%s' dbname='%s' user='%s' password='%s'" %(host, dbname, user, password)
     conn = psycopg2.connect(conn_string)
     return conn
