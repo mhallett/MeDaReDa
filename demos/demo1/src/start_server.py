@@ -90,6 +90,10 @@ if __name__ == '__main__':
         worker.worker_status.setWorkerStandby(hostname)
         logger.info('Worker set to standby')
 
+        logger.info('Update WorkerStatus.serverip')
+        worker.worker_status.setWorkerIP()
+        logger.info('Worker set IP')
+
         logger.info('start')
 
     main()

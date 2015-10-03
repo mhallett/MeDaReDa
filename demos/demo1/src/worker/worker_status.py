@@ -2,6 +2,7 @@
 
 import time
 import datetime
+import socket
 import medareda_lib
 import logging
 
@@ -95,12 +96,23 @@ def updateWorkerStatus(name,status):
     f_logger.info(sql)
     execute_sql(sql)
 
+    sql = "UPDATE WorkerStatus SET since = '%s' WHERE server_name = '%s' " %(now, name)
+    execute_sql(sql)
 
 def setWorkerStandby(name):
     now = datetime.datetime.now()
     #server_ip = 'ToDo'
     #server_id = self.wkr_id
     sql = "UPDATE WorkerStatus SET status = 'standby' WHERE server_name = '%s' " %( name)
+    execute_sql(sql)
+    sql = "UPDATE WorkerStatus SET since = '%s' WHERE server_name = '%s' " %(now, name)
+    execute_sql(sql)
+
+
+def setWorkerIP():
+    hostname = socket.gethostname()
+    ip = socket.gethostbyname(hostname)
+    sql = "UPDATE WorkerStatus SET server_ip = '%s' WHERE server_name = '%s' " %(ip, hostname)
     execute_sql(sql)
 
 
