@@ -4,15 +4,30 @@
 
 import time
 import datetime
-import logging
+import socket
 
 import medareda_lib
 
-f_logger = logging.getLogger(__name__)
-
 def get_conn():
-    f_logger.info('get_conn')
     return medareda_lib.get_conn()
+
+
+def getCombinedRate():
+    conn = get_conn()
+    cur = conn.cursor() 
+    sql = "select price, symbol from vPrice where date in (select max(date) from vPrice group by symbol)"
+    cur.execute(sql)
+    
+    product = 1.0
+    rows = cur.fetchall()
+    conn.close()
+
+    print "\nRows: \n"
+    
+    for row in rows:
+        product *= row[0]
+        #print "   ", row[1]
+    return product
 
 
 def processSinglePrice():
@@ -23,7 +38,7 @@ def processSinglePrice():
     row = c.fetchone()[0]
     
     if row == None:
-        f_logger.info('No rows to input rows to process')
+        #print 'No rows to input rows to process'
         return
         
     c.execute("UPDATE iPrice SET status = 'processing' WHERE iPriceID = %s" %row) #)) #, 'dPrice'))
@@ -32,7 +47,7 @@ def processSinglePrice():
     # select data to process
     c.execute("SELECT * FROM iPrice WHERE iPriceID = %s " %row )
     price_data = c.fetchone()
-    f_logger.info(price_data)
+    #print price_data
     iPriceId = price_data[0]
     iDate = price_data[1]
     status = price_data[2]
@@ -50,7 +65,8 @@ def processSinglePrice():
     
     try:
         start = datetime.datetime.now()
-        roll_ave = (rate + ask ) /2 # not really but will do for first example
+        roll_ave = getCombinedRate() # not really but will do for first example
+        
         error = 'good'
         time.sleep(2.0/60.0)
         end = datetime.datetime.now()
@@ -68,12 +84,17 @@ def processSinglePrice():
         #dc.execute('INSERT INTO pPrice (iPriceId, iDate, pStartDate, pEndDate, error, date, symbol, bid, rate, ask)  \
         #                   VALUES (?,?,?,?,?,?,?,?,?,?)', pPrice)
         
-        dc.execute("INSERT INTO pPrice ( iDate, pStartDate, pEndDate, error, date, symbol, bid, rate, ask)  \
-                           VALUES ('%s','%s','%s','%s','%s','%s',%s,%s,%s)" %(iDate, start, end, error, date, symbol, bid, rate, ask)  )
-            
+        worker = socket.gethostname()
+        
+        
+        sql = "INSERT INTO pPrice ( iDate, pStartDate, pEndDate, worker, error, date, symbol, bid, rate, ask)  \
+                           VALUES ('%s','%s','%s','%s','%s','%s','%s',%s,%s,%s)" %(iDate, start, end, worker, error, date, symbol, bid, rate, ask)  
+        #print 'sql:',sql
+        dc.execute(sql)
+        
     except Exception, e:
         print 'ERROR !!!', str(e)
-        f_logger.exception('Writting price to dPrice')
+        print 'sql:', sql
         print 'TODO write to pPrice ERROR msg'
         
     dconn.commit()
