@@ -3,14 +3,20 @@
 import collections
 import datetime
 import pyrax
-#import medareda_worker_lib
+import medareda_lib
+
+# dont use these function directly, use the office and worker code instead.
+# this is to keep the workerstatus table correct.
 
 
-def get_cs():
+def get_cs(): # cloud servers
     # read from config file
+    
+    default_region, user, password = medareda_lib.get_pyrax_details()
+
     pyrax.set_setting("identity_type", "rackspace")
-    pyrax.set_default_region('LDN')
-    pyrax.set_credentials('markhallett', 'c71cc6f2db354fa1adf234baf1e48244')
+    pyrax.set_default_region(default_region) 
+    pyrax.set_credentials(user, password ) 
 
     cs = pyrax.cloudservers
     return cs
@@ -22,10 +28,32 @@ def server_states(base_name):
 
     counter = collections.Counter()
     for s in servers:
+        #print s.name
         if s.name.startswith(base_name):
             counter[s.status] += 1
     return counter
 
+
+def deleteServer(server_name):
+    #print 'deleteServer', server_name,
+    cs = get_cs()
+    sacrifice = cs.servers.find(name=server_name)
+    _delete(sacrifice)
+    return
+
+def del_shut_down_all(basename):
+    print 'server.shut_down_all', basename
+    cs = get_cs()
+    for svr in  pyrax.cloudservers.list():
+            server_name = svr.name
+            if server_name.startswith(basename):
+                print svr.status
+                if svr.status == 'ACTIVE':
+                    print 'Delete', server_name
+                    svr.delete()
+            #else:
+            #    print 'leave', server.name
+    #return list of severs shut down (change to for worker in shut_down_all: remove)
 
 def countServers(base_name):
     states = server_states(base_name)
@@ -42,6 +70,8 @@ def _create_server(cs,name,image_id,flavor_id):
 def createServer(base_name,image_name):
     
         name = '%s-%s' %(base_name,countServers(base_name)+1)
+        
+        # name = 'medareda-worker-iprice-image' # hard code the hostname of the new server
         print 'create new server, called', name
          
         cs = get_cs()
@@ -74,7 +104,7 @@ def createServer(base_name,image_name):
 def _delete(server):
     server.delete()
     
-def delete(base_name):
+def delete(base_name): # delete worker with highest id
         #if status == 'idle':
         # set worker row to deleting
         count = countServers(base_name)
@@ -99,12 +129,7 @@ def delete(base_name):
             return remove_name
             #sacrifice.delete()
         
-        
-        
         #self.server.delete()
-        
-        
-        
         #remove row , do in lev
         '''
         cur = self.conn.cursor()
@@ -114,9 +139,19 @@ def delete(base_name):
         cur.close()
         self.conn.close()   
         '''   
-            
-            
-            
-            
-            
+
+def test_cs():
+    cs = get_cs()
+    print 'cs', cs
+
+def test_countServers():
+    s = countServers('')
+    print 'server count: ', s
+    
+if __name__ == '__main__':
+    print 'test'
+    test_cs()
+    test_countServers()
+    
+    
             
