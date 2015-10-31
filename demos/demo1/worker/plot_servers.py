@@ -6,6 +6,7 @@ import matplotlib.animation as animation
 import matplotlib.ticker as ticker
 import datetime
 import numpy as np
+import ConfigParser
 
 import medareda_lib
 import worker_status

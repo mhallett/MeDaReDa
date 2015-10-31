@@ -6,9 +6,10 @@ import ConfigParser
 import urlparse
 import psycopg2
 
-def get_ini_data(section, names):  
-    parser = ConfigParser.SafeConfigParser()  
+def get_ini_data(section, names):
+    parser = ConfigParser.SafeConfigParser()
     parser.read('./ini/medareda.ini')
+    #parser.read('../ini/medareda.ini') # tmp to get local dir code running
     rtn = []
     for name in names:
         rtn.append( parser.get(section, name)  )
@@ -24,8 +25,8 @@ def get_conn():
 def get_pyrax_details():
     (default_region, user, password) = get_ini_data ('pyrax',('default_region','user','password'))
     return (default_region, user, password)
-    
-    
+
+
 
 def test():
     c = get_conn()
@@ -36,6 +37,7 @@ def test():
     default_region, user, password = get_pyrax_details()
     print 'default_region: ', default_region
     print 'user: ', user
-    
+
 if __name__ == '__main__':
+    # run from the directory above !!
     test()
