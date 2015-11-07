@@ -11,7 +11,7 @@ def _execute_sql(sql):
     cur = conn.cursor()
     cur.execute(sql)
     try:
-        result = cur.fetchall() 
+        result = cur.fetchall()
     except:
         result = None
     conn.commit()
@@ -21,19 +21,19 @@ def _execute_sql(sql):
     # use finally
 
 def getWorkerStatuses():
-    sql = "SELECT count(*), status from  WorkerStatus GROUP BY status " 
+    sql = "SELECT count(*), status from  WorkerStatus GROUP BY status "
     result = _execute_sql(sql)
-    
+
     worker_statuses = {}
     for state in result:
         worker_statuses[state[1]] = state[0]
     return worker_statuses
 
-def getServersNameStatus(basename):    
+def getServersNameStatus(basename):
     sql = "SELECT server_name, status from  WorkerStatus where server_name like '%s%%'" %(basename)
     result = _execute_sql(sql)
-    return result    
-    
+    return result
+
 
 def countWorkers(name):
     workers = getWorkerStatuses()
@@ -43,7 +43,7 @@ def countWorkers(name):
         #print state, count
         rtn_count += count
     return rtn_count
-    
+
 def addWorker(name):
     print 'Adding woker status'
 
@@ -51,21 +51,21 @@ def addWorker(name):
     server_ip = 'ToDo'
     server_id = 0 # pull from name
     sql = "INSERT INTO WorkerStatus ( server_name, server_ip, serverId,status, since, rate) \
-                     VALUES ('%s','%s','%s','%s','%s',%s)" %(name, server_ip, server_id,'build', now, 1 ) 
+                     VALUES ('%s','%s','%s','%s','%s',%s)" %(name, server_ip, server_id,'build', now, 1 )
 
     _execute_sql(sql)
-        
+
 
 def removeWorker(name):
     print 'Removing worker staus'
-    conn = get_conn()
-    cur = conn.cursor()
+    ##conn = get_conn()
+    ##cur = conn.cursor()
     now = datetime.datetime.now()
 
     sql = "DELETE from WorkerStatus  WHERE server_name = '%s' " %(name)
     _execute_sql(sql)
 
-        
+
 
 def updateWorkerStatus(name,status):
     print 'Update worker status to ', status
@@ -75,8 +75,8 @@ def updateWorkerStatus(name,status):
     #server_id = self.wkr_id
     sql = "UPDATE WorkerStatus SET status = '%s',since = '%s' WHERE server_name = '%s' " %(status, now, name) #NEW
     _execute_sql(sql)
-    
-    
+
+
 def setWorkerWorking(name):
     print 'Update worker status to work'
 
@@ -85,7 +85,7 @@ def setWorkerWorking(name):
     #server_id = self.wkr_id
     sql = "UPDATE WorkerStatus SET status = 'work' WHERE server_name = '%s' " %( name)
     _execute_sql(sql)
-    
+
 def setWorkerStandby(name): # for start up
     #now = datetime.datetime.now()
     updateWorkerStatus(name,'standby')
@@ -99,7 +99,7 @@ def getStatus(name):
     cur = conn.cursor()
     sql = "SELECT status from  WorkerStatus WHERE server_name = '%s' " %(name)
     cur.execute(sql)
-    result = cur.fetchall()[0][0]  
+    result = cur.fetchall()[0][0]
     conn.commit()
     cur.close()
     conn.close()
@@ -107,15 +107,15 @@ def getStatus(name):
 
 
 def test_WorkerStatuses():
-    sql  = "SELECT * from  WorkerStatus" 
+    sql  = "SELECT * from  WorkerStatus"
     result = _execute_sql(sql)
     print 'result: ', result
-    
+
 def test_getWorkerStatuses():
     print 'getWorkerStatuses'
     statuses = getWorkerStatuses()
     print 'statuses: ', statuses
-    
+
 def test():
     test_WorkerStatuses()
     #test_getWorkerStatuses()

@@ -6,7 +6,11 @@ import matplotlib.animation as animation
 import matplotlib.ticker as ticker
 import datetime
 import numpy as np
-import ConfigParser
+
+try:
+    import configparser
+except:
+    from six.moves import configparser
 
 import medareda_lib
 import worker_status
@@ -114,7 +118,8 @@ def plot():
         #plt_b = plt.bar(pos_list_ss, (0,0,0,cooldown) ,color = 'b', align = 'center')
 
         ax1.set_xlabel('State of Servers')
-
+        axes = plt.gca()
+        axes.set_ylim([0.0,10.0])
 
         # 2 -----------
 
@@ -152,6 +157,10 @@ def plot():
         plt_b = plt.bar(pos_list, (0,0,0,cooldown) ,color = 'b', align = 'center')
         ax2.set_xlabel('State of Workers')
 
+        axes = plt.gca()
+        axes.set_ylim([0.0,10.0])
+
+
         # 3 -----------
         work_states = ('Wait','Process','Error')
         iPrice_states = get_iPrice_status()
@@ -166,7 +175,6 @@ def plot():
                     wk_wait =  wk_processing = wk_error = 0
 
         #ax = plt.axes()
-
         #ax1.set_ylabel('Count')
 
 
@@ -179,6 +187,14 @@ def plot():
         plt_y3 = plt.bar(pos_wk_list, (0,0,wk_error) ,color = 'r', align = 'center')
         ax3.set_xlabel('State of inPrices')
         #ax2.set_ylabel('Count')
+
+        x1,x2,y1,y2 = plt.axis()
+        #plt.axis((x1,x2,25,250))
+
+
+        y_max = max([y2,wk_wait,wk_processing,wk_error,10.0])
+        axes = plt.gca()
+        axes.set_ylim([0.0,y_max])
 
     ani1 = animation.FuncAnimation(fig1,animate1, interval=2000)
     plt.show()

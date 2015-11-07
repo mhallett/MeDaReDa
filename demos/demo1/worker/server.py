@@ -5,7 +5,7 @@ import sys
 import collections
 import datetime
 import pyrax
-import medareda_lib # ????§
+import medareda_lib
 
 import ConfigParser
 #import medareda_worker_lib
@@ -31,12 +31,12 @@ def get_ini_values():
 
 def get_cs(): # cloud servers
     # read from config file
-    
+
     default_region, user, password = medareda_lib.get_pyrax_details()
 
     pyrax.set_setting("identity_type", "rackspace")
-    pyrax.set_default_region(default_region) 
-    pyrax.set_credentials(user, password ) 
+    pyrax.set_default_region(default_region)
+    pyrax.set_credentials(user, password )
     #ini_values = get_ini_values()
     #pyrax.set_setting("identity_type", "rackspace")
     #pyrax.set_default_region(ini_values['default_region'])
@@ -94,7 +94,7 @@ def _create_server(cs,name,image_id,flavor_id):
 def createServer(base_name,image_name):
 
         name = '%s-%s' %(base_name,countServers(base_name)+1)
-        
+
         # name = 'medareda-worker-iprice-image' # hard code the hostname of the new server
         print 'create new server, called', name
 
@@ -126,7 +126,7 @@ def createServer(base_name,image_name):
 
 def _delete(server):
     server.delete()
-    
+
 def delete(base_name): # delete worker with highest id
         #if status == 'idle':
         # set worker row to deleting
@@ -151,7 +151,7 @@ def delete(base_name): # delete worker with highest id
             _delete(sacrifice)
             return remove_name
             #sacrifice.delete()
-        
+
         #self.server.delete()
         #remove row , do in lev
         '''
@@ -160,8 +160,8 @@ def delete(base_name): # delete worker with highest id
         cur.execute(sql)
         self.conn.commit()
         cur.close()
-        self.conn.close()   
-        '''   
+        self.conn.close()
+        '''
 
 def test_cs():
     cs = get_cs()
@@ -170,9 +170,8 @@ def test_cs():
 def test_countServers():
     s = countServers('')
     print 'server count: ', s
-    
+
 if __name__ == '__main__':
     print 'test'
     test_cs()
     test_countServers()
-    
