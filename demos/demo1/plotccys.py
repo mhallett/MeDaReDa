@@ -120,8 +120,14 @@ def plot():
         labels = ax1.get_xticklabels()
         plt.setp(labels, rotation='vertical', fontsize=10)
 
+        axes = plt.gca()
+        axes.set_ylim([0.0,2.0])
+        plt.ylabel('exchange rate')
 
     ani1 = animation.FuncAnimation(fig1,animate1, interval=2000)
+
+
+
     plt.show()
 
 if __name__ == '__main__':

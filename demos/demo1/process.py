@@ -48,7 +48,7 @@ def processSinglePrice():
     #print row
 
     if row == None:
-        print 'No rows input table to process'
+        #print 'No rows input table to process'
         return
 
 

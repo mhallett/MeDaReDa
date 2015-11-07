@@ -100,8 +100,6 @@ def refresh_tables():
     create_vPrice()
     create_vViewpoint()
     register_price()
-    print 'Done'
-
 
 if __name__ == '__main__':
-    refesh_tables()
+    refresh_tables()

@@ -35,7 +35,7 @@ def clear_tables():
 # -------------------------------------------
 
 def get_price(ticker):
-    #print '-----------'
+    #rint '-----------'
     #Currency('GBPUSD').refresh()
     bid = Currency(ticker).get_bid()
     rate = Currency(ticker).get_rate()
@@ -43,7 +43,7 @@ def get_price(ticker):
 
     trade_datetime  = Currency(ticker).get_trade_datetime ()
 
-    print ticker, bid
+    #print ticker, bid
 
     conn = get_conn()
     c  = conn.cursor()
