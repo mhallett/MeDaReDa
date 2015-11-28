@@ -8,6 +8,10 @@ import psycopg2
 
 def get_ini_data(section, names):
     parser = ConfigParser.SafeConfigParser()
+    # called from above sodont need to go up a dir
+    # via get_conn see below
+
+    # in worker so need to go up a dir to get the ini folder ??
     parser.read('./ini/medareda.ini')
     #parser.read('../ini/medareda.ini') # tmp to get local dir code running
     rtn = []

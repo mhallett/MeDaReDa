@@ -22,13 +22,17 @@ def getCombinedRate():
     rows = cur.fetchall()
     conn.close()
 
-    if len(rows) < 3:
-        return 0.0
+    if len(rows) != 3:
+        return 0.0 #None
     #print "\nRows: \n"
 
     for row in rows:
         product *= row[0]
         #print "   ", row[1]
+
+    if (product < 0.9) or (1.1 < product):
+        print product, rows
+
     return product
 
 
@@ -119,4 +123,4 @@ def processSinglePrice():
 
 if __name__ == '__main__':
      print 'combined rate!', getCombinedRate()
-     print 'process single price!', processSinglePrice()
+     #print 'process single price!', processSinglePrice()
