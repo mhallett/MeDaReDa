@@ -8,6 +8,8 @@ import socket
 
 import medareda_lib
 
+import dagCcy
+
 def get_conn():
     return medareda_lib.get_conn()
 
@@ -18,7 +20,6 @@ def getCombinedRate():
     sql = "select price, symbol from vPrice where date in (select max(date) from vPrice group by symbol)"
     cur.execute(sql)
 
-    product = 1.0
     rows = cur.fetchall()
     conn.close()
 
@@ -27,7 +28,16 @@ def getCombinedRate():
     #print "\nRows: \n"
 
     for row in rows:
-        product *= row[0]
+        print row
+        rate = row[0]
+        if row[1] == 'GBPUSD':
+            dagCcy.MyDAG().set_a(rate)
+        if row[1] == 'USDEUR':
+            dagCcy.MyDAG().set_b(rate)
+        if row[1] == 'EURGBP':
+            dagCcy.MyDAG().set_c(rate)
+
+        product = dagCcy.MyDAG().get_d() #*= row[0]
         #print "   ", row[1]
 
     if (product < 0.9) or (1.1 < product):
