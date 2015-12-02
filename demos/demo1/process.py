@@ -5,43 +5,57 @@
 import time
 import datetime
 import socket
+import logging
+import logging.config
 
 import medareda_lib
 
 import dagCcy
+
+logging.config.fileConfig('./ini/logging.conf')
+#logging.basicConfig(filename='./log/process.log', level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+#logger = logging.getLogger('__main__')
 
 def get_conn():
     return medareda_lib.get_conn()
 
 
 def getCombinedRate():
+    logger.info('getCombinedRate')
     conn = get_conn()
     cur = conn.cursor()
-    sql = "select price, symbol from vPrice where date in (select max(date) from vPrice group by symbol)"
+    sql = "select distinct price, symbol from vPrice where date in (select max(date) from vPrice group by symbol)"
     cur.execute(sql)
 
     rows = cur.fetchall()
     conn.close()
 
     if len(rows) != 3:
+        logger.info('len != 3: %s' %rows)
         return 0.0 #None
     #print "\nRows: \n"
 
     for row in rows:
-        print row
+        #print row
         rate = row[0]
         if row[1] == 'GBPUSD':
             dagCcy.MyDAG().set_a(rate)
+            logger.debug('GBPUSD %s' %rate)
         if row[1] == 'USDEUR':
             dagCcy.MyDAG().set_b(rate)
+            logger.debug('USDEUR %s' %rate)
         if row[1] == 'EURGBP':
             dagCcy.MyDAG().set_c(rate)
+            logger.debug('EURGBP %s' %rate)
 
-        product = dagCcy.MyDAG().get_d() #*= row[0]
+    product = dagCcy.MyDAG().get_d() #*= row[0]
+    logger.debug('product %s' %product)
+    #dagCcy.MyDAG().pp()
         #print "   ", row[1]
 
-    if (product < 0.9) or (1.1 < product):
-        print product, rows
+    #if (product < 0.9) or (1.1 < product):
+    #    print product, rows
 
     return product
 
