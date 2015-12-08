@@ -24,7 +24,8 @@ def server_just_built(conf_filename):
 
     # if the log file does not exist then the box has just become acitve
 
-    if os.path.isfile(log_name):
+    #if os.path.isfile(log_name):
+    if os.path.getsize(log_name) > 0.0:
         return False
     else:
         return True
