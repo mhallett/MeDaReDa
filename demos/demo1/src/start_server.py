@@ -22,7 +22,7 @@ def server_just_built(conf_filename):
     parser.read(conf_filename)
     log_name = parser.get('handler_fileHandler','args').split("'")[1]
 
-    # if the log file does not exist then the box has just become acitve
+    # if the log file is empty then the box has just become acitve
 
     #if os.path.isfile(log_name):
     if os.path.getsize(log_name) > 0.0:
